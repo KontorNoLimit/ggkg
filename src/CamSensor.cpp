@@ -7,8 +7,9 @@ CamSensor::CamSensor()
 {
     this->sensorInited = false;
 
-    this->cameraConfig.ledc_channel = LEDC_CHANNEL_0;
-    this->cameraConfig.ledc_timer = LEDC_TIMER_0;
+    // (16/04/2024 kontornl) change channel to 2 to free first 2 channel for servos
+    this->cameraConfig.ledc_channel = LEDC_CHANNEL_2;
+    this->cameraConfig.ledc_timer = LEDC_TIMER_2;
     this->cameraConfig.pin_d0 = Y2_GPIO_NUM;
     this->cameraConfig.pin_d1 = Y3_GPIO_NUM;
     this->cameraConfig.pin_d2 = Y4_GPIO_NUM;
@@ -21,8 +22,9 @@ CamSensor::CamSensor()
     this->cameraConfig.pin_pclk = PCLK_GPIO_NUM;
     this->cameraConfig.pin_vsync = VSYNC_GPIO_NUM;
     this->cameraConfig.pin_href = HREF_GPIO_NUM;
-    this->cameraConfig.pin_sscb_sda = SIOD_GPIO_NUM;
-    this->cameraConfig.pin_sscb_scl = SIOC_GPIO_NUM;
+    // (16/04/2024 kontornl) change sscb to sccb according to deprecation warning
+    this->cameraConfig.pin_sccb_sda = SIOD_GPIO_NUM;
+    this->cameraConfig.pin_sccb_scl = SIOC_GPIO_NUM;
     this->cameraConfig.pin_pwdn = PWDN_GPIO_NUM;
     this->cameraConfig.pin_reset = RESET_GPIO_NUM;
     this->cameraConfig.xclk_freq_hz = 20000000;

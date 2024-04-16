@@ -26,9 +26,9 @@
 // #define CONFIG_LED_LEDC_CHANNEL LEDC_CHANNEL_4
 // #define CONFIG_LED_MAX_INTENSITY 255
 // If encountered "fd_*.h" not found, change the following value to 0
-#define CONFIG_ESP_FACE_DETECT_ENABLED 1
+#define CONFIG_ESP_FACE_DETECT_ENABLED 0
 // If encountered "fr_*.h" not found, change the following value to 0
-#define CONFIG_ESP_FACE_RECOGNITION_ENABLED 1
+#define CONFIG_ESP_FACE_RECOGNITION_ENABLED 0
 
 #if defined(ARDUINO_ARCH_ESP32) && defined(CONFIG_ARDUHAL_ESP_LOG)
 #include "esp32-hal-log.h"
@@ -74,7 +74,7 @@ typedef struct
     size_t len;
 } jpg_chunking_t;
 
-#define PART_BOUNDARY "(c) 2023 A-Sync China Facility"
+#define PART_BOUNDARY "(c) 2024 A-Sync China Facility"
 static const char *_STREAM_CONTENT_TYPE = "multipart/x-mixed-replace;boundary=" PART_BOUNDARY;
 static const char *_STREAM_BOUNDARY = "\r\n--" PART_BOUNDARY "\r\n";
 static const char *_STREAM_PART = "Content-Type: image/jpeg\r\nContent-Length: %u\r\nX-Timestamp: %d.%06d\r\n\r\n";
@@ -400,6 +400,8 @@ static esp_err_t capture_handler(httpd_req_t *req)
 
     if (!fb)
     {
+        camSensor.deinit();
+        camSensor.init();
         ESP_LOGE(TAG, "Camera capture failed");
         httpd_resp_send_500(req);
         return ESP_FAIL;
@@ -807,7 +809,10 @@ static esp_err_t cmd_handler(httpd_req_t *req)
         res = gimbal.getYawAngle();
     } else if (!strcmp(variable, "reset"))
         ESP.restart();
-    else if (!strcmp(variable, "quality"))
+    else if (!strcmp(variable, "sensorreset")) {
+        camSensor.deinit();
+        camSensor.init();
+    } else if (!strcmp(variable, "quality"))
         res = s->set_quality(s, val);
     else if (!strcmp(variable, "contrast"))
         res = s->set_contrast(s, val);

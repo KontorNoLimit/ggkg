@@ -9,7 +9,6 @@
 #if CONFIG_HTTPD_MAX_REQ_HDR_LEN <= 512
 #error "CONFIG_HTTPD_MAX_REQ_HDR_LEN is not configured."
 #endif
-#include "CamSensor.h"
 // #include "soc/rtc.h"
 
 #define TAG "main"
@@ -27,6 +26,7 @@ String httpd_auth_b64;
 String uart0_rbuf = "";
 
 HardwareSerial uart0 = Serial;
+CamSensor camSensor;
 Gimbal gimbal;
 
 #if SET_WIREGUARD_ENABLE
@@ -67,7 +67,6 @@ void setup() {
     analogWrite(LED_FLASH, 1);
 
     uart0.print("setup: cam init: ");
-    CamSensor camSensor;
     esp_err_t err = camSensor.init();
     if(err == ESP_OK) uart0.println("done");
     else {

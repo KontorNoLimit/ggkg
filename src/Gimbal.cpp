@@ -4,7 +4,7 @@
 #include "time.h"
 
 // (10/10/2023 kontornl) allocate memory for STATIC members
-Servo Gimbal::servoReserved0, Gimbal::servoReserved1, Gimbal::servoPitch, Gimbal::servoYaw;
+Servo Gimbal::servoPitch, Gimbal::servoYaw;
 time_t Gimbal::tsPitchLastOpened, Gimbal::tsYawLastOpened;
 bool Gimbal::silentTaskDonePitch, Gimbal::silentTaskDoneYaw;
 int Gimbal::currPitchMs, Gimbal::currYawMs;
@@ -20,8 +20,6 @@ Gimbal::~Gimbal()
 void Gimbal::init()
 {
     this->silentIntervMs = 6;
-    this->servoReserved0.attach(SERVO_PITCH);
-    this->servoReserved1.attach(SERVO_PITCH);
 
     this->servoPitch.attach(SERVO_PITCH);
     this->servoPitch.write(pitchAngle);
